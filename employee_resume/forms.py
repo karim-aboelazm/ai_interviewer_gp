@@ -13,8 +13,7 @@ class HRLoginForm(forms.Form):
 
     def clean_username(self):
         user_name = self.cleaned_data['username']
-        # if User.objects.filter(username=user_name).exists():
-        if True:
+        if User.objects.filter(username=user_name).exists():
             pass
         else:
             raise forms.ValidationError('hr with this username does not exists')

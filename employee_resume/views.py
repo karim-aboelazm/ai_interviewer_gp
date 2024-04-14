@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView,CreateView,FormView
+from django.views.generic import TemplateView,CreateView,FormView,View
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login , logout
 from .models import *
@@ -11,7 +11,7 @@ import fitz
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import CountVectorizer,TfidfTransformer
 from sklearn.linear_model import SGDClassifier
-
+from django.urls import reverse_lazy,reverse
 spacy.load('en_core_web_sm')
 
 def convert_pdf_into_text(url):
@@ -42,7 +42,7 @@ def resume_predict(res_txt):
 
 class ResumeMixin(object):
     def dispatch(self, request, *args, **kwargs):
-        if not (request.user.is_authenticated):
+        if not (request.user.is_authenticated and HrModel.objects.filter(user=request.user).exists()):
             return redirect("/login/")
         return super().dispatch(request, *args, **kwargs)
 
@@ -77,21 +77,26 @@ class HRPageView(TemplateView):
 class HRLoginPage(FormView):
     template_name = 'login.html'
     form_class = HRLoginForm
-    success_url = '/'
+    success_url = reverse_lazy('employee_resume:home')
 
     def form_valid(self, form):
-        user_name = form.cleaned_data.get('username')
-        user_password = form.cleaned_data.get('userpassword')
-        usr = authenticate(username=user_name,password=user_password)
-        if usr is not None:
+        username = form.cleaned_data.get('username')
+        userpassword = form.cleaned_data.get('userpassword')
+        usr = authenticate(username=username,password=userpassword)
+        if usr is not None and HrModel.objects.filter(user=usr).exists():
             login(self.request,usr)
         else:
             return render(self.request,self.template_name,{'form':self.form_class})
         return super().form_valid(form)
     
-    # def get_success_url(self):
-    #     if 'next' in self.request.GET:
-    #         next_url = self.request.GET.get('next')
-    #         return next_url
-    #     else:
-    #         self.success_url
+    def get_success_url(self):
+        if 'next' in self.request.GET:
+            next_url = self.request.GET.get('next')
+            return next_url
+        else:
+            return self.success_url
+
+class HRLogoutView(View):
+    def get(self,request):
+        logout(request)
+        return redirect('employee_resume:login')
