@@ -16,6 +16,8 @@ class ResumeAnalysis(models.Model):
     
     score = models.IntegerField()
 
+    phone = models.CharField(max_length=30)
+    
     prediction = models.CharField(max_length=200)
 
     def __str__(self):
@@ -36,3 +38,10 @@ class HrModel(models.Model):
     
     def __str__(self):
         return self.full_name
+    
+
+class AffineModel(models.Model):
+    token = models.CharField(max_length=250,verbose_name='Affine Token')
+    workspace = models.CharField(max_length=50,verbose_name='Affine Workspace')
+    def __str__(self):
+        return f"Affine Data [{self.id}]"
