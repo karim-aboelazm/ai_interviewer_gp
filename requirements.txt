@@ -57,7 +57,7 @@ sqlparse==0.4.4
 srsly==2.4.8
 thinc==8.2.3
 threadpoolctl==3.4.0
-tqdm==4.66.2
+tqdm==4.66.3
 typer==0.9.4
 typing_extensions==4.11.0
 tzdata==2024.1
