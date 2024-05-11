@@ -18,3 +18,8 @@ class HRLoginForm(forms.Form):
         else:
             raise forms.ValidationError('hr with this username does not exists')
         return user_name
+
+class QuestionsReviewsForm(forms.Form):
+    ANSWERS = [(i.upper(), i.upper()) for i in ['a', 'b', 'c', 'd']]
+    user_answer = forms.ChoiceField(choices=ANSWERS, widget=forms.Select())
+    question_id = forms.IntegerField(widget=forms.NumberInput())

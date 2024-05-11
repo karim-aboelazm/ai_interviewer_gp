@@ -13,6 +13,7 @@ urlpatterns = [
     path('cv-prediction/',PredictionPageView.as_view(),name='cv'),
     path('employees/',EmployeePageView.as_view(),name='emp'),
     path('hr/',HRPageView.as_view(),name='hr'),
+    path('interview/',InterViewPage.as_view(),name='interview'),
     path('logout/',HRLogoutView.as_view(),name='logout'),
 ]
 

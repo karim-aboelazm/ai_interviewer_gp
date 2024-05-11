@@ -15,6 +15,8 @@ from django.urls import reverse_lazy,reverse
 from .read_cv import get_resume_info
 import random
 from .courses import *
+from django.http import HttpResponse
+
 spacy.load('en_core_web_sm')
 
 # def convert_pdf_into_text(url):
@@ -55,8 +57,14 @@ class HomePageView(ResumeMixin,CreateView):
     success_url = '/'
     def form_valid(self, form):
         resume = form.cleaned_data.get('resume')
+        self.request.session['is_posted'] = True
         return super(HomePageView,self).form_valid(form)
     
+    def form_invalid(self, form):
+        self.request.session['is_posted'] = False
+        return super().form_invalid(form)
+        
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         affine = AffineModel.objects.latest('id')
@@ -71,20 +79,23 @@ class HomePageView(ResumeMixin,CreateView):
             resume_name = last_res_name[last_res_name.index('/')+1:]
             path_res = f"media\\resume\\{resume_name}"
             res_text , resume_data = get_resume_info(path_res,token,ws)
+            
             context['prediction'] = resume_predict(str(res_text))
             context['full_name'] = resume_data['full_name']
-            context['email_address'] = resume_data['email_address']
+            context['email_address'] = resume_data['email_address'][0]
             context['phone_number'] = resume_data['phone_number']
             context['links'] = resume_data['links']
             context['date_of_birth'] = resume_data['date_of_birth']
             context['address'] = resume_data['address']
-            context['education'] = resume_data['education']
+            edu = str(resume_data['education']).split(' - ')
+            education = {'spcialize':edu[0],'org':edu[1],'dur':edu[2]}
+            context['education'] = education
             context['total_experience'] = resume_data['total_experience']
             context['languages'] = resume_data['languages']
             context['profession'] = resume_data['profession']
             context['work_experience'] = resume_data['work_experience']
             context['skills'] = resume_data['skills']
-            
+            context['is_posted'] = self.request.session.get('is_posted')
             context["resume_score"] = 0
             text = str(res_text)
             if 'Objective' in text or 'objective' in text:
@@ -132,13 +143,13 @@ class HomePageView(ResumeMixin,CreateView):
 
             context['interview_improve']= [link for link in random.sample(interview_videos, 4)]
             
-            if not ResumeAnalysis.objects.filter(email=context['email_address'][0]).exists():
+            if not ResumeAnalysis.objects.filter(email=context['email_address']).exists():
                 ResumeAnalysis.objects.create(
                     resume = last_res_path,
                     name = context['full_name'],
-                    email = context['email_address'][0],
-                    score = context['resume_score']
-                    phone = context['phone_number']
+                    email = context['email_address'],
+                    score = context['resume_score'],
+                    phone = context['phone_number'],
                     prediction = context['prediction']
                 )
         return context
@@ -158,6 +169,11 @@ class EmployeePageView(TemplateView):
 class HRPageView(TemplateView):
     template_name = 'hr.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["resume_analysis"] = ResumeAnalysis.objects.all()
+        return context
+    
 class HRLoginPage(FormView):
     template_name = 'login.html'
     form_class = HRLoginForm
@@ -184,3 +200,25 @@ class HRLogoutView(View):
     def get(self,request):
         logout(request)
         return redirect('employee_resume:login')
+
+class InterViewPage(FormView):
+    template_name = 'interview.html'
+    form_class = QuestionsReviewsForm
+    success_url = reverse_lazy('employee_resume:interview')
+    def form_valid(self, form):
+        current_user = self.request.user
+        q_id = form.cleaned_data.get('question_id')
+        u_a = form.cleaned_data.get('user_answer')
+        if q_id and u_a:
+            question = InterViewQuestion.objects.filter(pk=q_id).first()
+            rec = InterviewQuestionReview.objects.create(user=current_user,question=question,user_answer=str(u_a).strip().upper())
+            rec.save(force_insert=False)
+        return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        all_questions = InterViewQuestion.objects.all()
+        context["all_questions"] = all_questions
+        return context
+    
+    
