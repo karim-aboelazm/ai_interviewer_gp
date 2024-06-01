@@ -48,7 +48,7 @@
                                 <td class="text-center">{{cva.score}} %</td>
                                 <td class="text-center">{{cva.prediction}}</td>
                                 <td class="text-center"><a href="{{ cva.resume.resume.url }}" download>Downloa</a></td>
-                                <td class="text-center"><a href="{% url "employee_resume:interview" %}">Go To Interview</a></td>
+                                <td class="text-center"><a href="{% url "employee_resume:interview" cva.prediction %}">Go To Interview</a></td>
                               </tr>
                             {% endfor %}
                             </tbody>

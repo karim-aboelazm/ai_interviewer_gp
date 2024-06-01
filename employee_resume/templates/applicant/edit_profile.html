@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+{% load static %}
+{% load bootstrap5 %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Update Profile</title>
+    <link rel="stylesheet" href="{% static '' %}fonts/material-icon/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" href="{% static '' %}css/login_style.css">
+</head>
+<body>
+    <section class="signup" style="margin-top:35px">
+        <div class="container" style="padding: 10px">
+            <div class="signup-content" style="padding: 10px">
+                <div class="signup-form">
+                    <h2 class="form-title">Edit Profile</h2>
+                    <form method="POST" class="register-form" id="register-form" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="full_name"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                            <input type="text" name="full_name" id="full_name" required value="{{applicant.full_name}}"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone"><i class="zmdi zmdi-phone material-icons-phone"></i></label>
+                            <input type="phone" name="phone" id="phone" value="{{applicant.phone}}"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="address"><i class="zmdi zmdi-map material-icons-map"></i></label>
+                            <input type="text" name="address" id="address" value="{{applicant.address}}"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="image"><i class="zmdi zmdi-account material-icons-account"></i></label>
+                            <input type="file" name="image" id="image" placeholder="Profile Image"/>
+                        </div>
+                        <div class="form-group form-button btn-dark">
+                            <input type="submit" class="form-submit" value="Edit"/>
+                        </div> 
+                        {% if form.errors %}
+                            <p>{{form.errors}}</p>
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="{% static '' %}vendor/jquery/jquery.min.js"></script>
+    <script src="{% static '' %}js/login_main.js"></script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="{% static '' %}fonts/material-icon/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" href="{% static '' %}css/login_style.css">
+</head>
+<body>
+    <section class="signup" style="margin-top:35px">
+        <div class="container" style="padding: 10px">
+            <div class="signup-content" style="padding: 10px">
+                <div class="signup-form">
+                    <h2 class="form-title">Sign up</h2>
+                    <form method="POST" class="register-form" id="register-form">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="user_name"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                            <input type="text" name="username" id="user_name" placeholder="Username"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="full_name"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                            <input type="text" name="full_name" id="full_name" required placeholder="Full Name"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="email"><i class="zmdi zmdi-email"></i></label>
+                            <input type="email" name="email" id="email" placeholder="Email Address"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="pass"><i class="zmdi zmdi-lock"></i></label>
+                            <input type="password" name="password" id="pass" placeholder="Password"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone"><i class="zmdi zmdi-phone material-icons-phone"></i></label>
+                            <input type="phone" name="phone" id="phone" placeholder="Mobile Phone"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="address"><i class="zmdi zmdi-map material-icons-map"></i></label>
+                            <input type="text" name="address" id="address" placeholder="Address"/>
+                        </div>
+                        <div class="form-group form-button">
+                            <input type="submit" name="signup" id="signup" class="form-submit" value="Register"/>
+                        </div> 
+                        {% if form.errors %}
+                            <p>{{form.errors}}</p>
+                        {% endif %}
+                    </form>
+                </div>
+                <div class="signup-image">
+                    <figure><img src="{% static '' %}images/signup-image.jpg" alt="sing up image"></figure>
+                    <span>if you have an account please <a href="{% url 'employee_resume:applicant_login' %}" style="text-decoration:none; color:#000; border-bottom:2px solid;">Login</a></span>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="{% static '' %}vendor/jquery/jquery.min.js"></script>
+    <script src="{% static '' %}js/login_main.js"></script>
+</body>
+</html>

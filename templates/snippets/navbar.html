@@ -3,7 +3,7 @@
     <div class="container">
         <a class="navbar-brand" href="index.html">
             <i class="bi-back"></i>
-            <span>Topic</span>
+            <span>HireLens</span>
         </a>
 
         <div class="d-lg-none ms-auto me-4">
@@ -17,38 +17,29 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-lg-5 me-lg-auto">
                 <li class="nav-item">
-                    <a class="nav-link click-scroll" href="#section_1">Home</a>
+                    <a class="nav-link click-scroll" href="#section_1">Resume Analysis</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link click-scroll" href="#section_2">Browse Topics</a>
+                    <a class="nav-link click-scroll" href="{% url "employee_resume:hr" %}">Human Resouces</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link click-scroll" href="#section_3">How it works</a>
+                    <a class="nav-link click-scroll" href="#section_3">About Project</a>
                 </li>
 
                 <li class="nav-item">
                     <a class="nav-link click-scroll" href="#section_4">FAQs</a>
                 </li>
-
-                <li class="nav-item">
-                    <a class="nav-link click-scroll" href="#section_5">Contact</a>
-                </li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Pages</a>
-
-                    <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
-                        <li><a class="dropdown-item" href="{% url "employee_resume:hr" %}">Hr Page</a></li>
-
-                        <li><a class="dropdown-item" href="{% url "employee_resume:contact" %}">Contact Form</a></li>
-                    </ul>
-                </li>
             </ul>
 
             <div class="d-none d-lg-block">
-                <a href="#top" class="navbar-icon bi-person smoothscroll"></a>
+                {% if is_hr %}
+                    <a href="{% url 'employee_resume:hr_profile' %}" class="navbar-icon bi-person smoothscroll"></a>
+                {% else %}
+                    <a href="{% url 'employee_resume:applicant_profile' %}" class="navbar-icon bi-person smoothscroll"></a>
+                {% endif %}
+                
             </div>
         </div>
     </div>

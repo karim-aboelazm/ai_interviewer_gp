@@ -18,7 +18,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Project Apps
     "employee_resume",
-    "django_bootstrap5"
+    "bootstrap5"
 ]
 
 MIDDLEWARE = [
@@ -88,5 +88,12 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_DIRS = (os.path.join(BASE_DIR, "media"),)
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "karimaboelazm6@gmail.com"
+EMAIL_HOST_PASSWORD = "ublaypufsvnattkw"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

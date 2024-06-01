@@ -1,29 +1,68 @@
 {% extends "base.html" %}
 {% load static %}
-{% load django_bootstrap5 %}
+{% load bootstrap5 %}
 
 {% block title %}Home{% endblock title %}
 {% block content %}
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap">
 <section class="hero-section d-flex justify-content-center align-items-center" id="section_1">
     <div class="container">
         <div class="row">
 
             <div class="col-lg-8 col-12 mx-auto">
+                <style>
+                    .logo-container {
+                        font-family: 'Roboto', sans-serif;
+                    }
+                    
+                    .animated-text {
+                        font-size: 4rem;
+                        font-weight: bold;
+                        color: #fff;
+                        animation: fadeInOut 3s infinite;
+                    }
+                    
+                    @keyframes fadeInOut {
+                        0% { opacity: 0; }
+                        50% { opacity: 1; }
+                        100% { opacity: 0; }
+                    }
+                </style>
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        const textElement = document.getElementById("animated-text");
+                        const text = "HireLens";
+                        let index = 0;
+                    
+                        function typeWriter() {
+                            if (index < text.length) {
+                                textElement.innerHTML += text.charAt(index);
+                                index++;
+                                setTimeout(typeWriter, 200);
+                            } else {
+                                setTimeout(() => {
+                                    textElement.innerHTML = "";
+                                    index = 0;
+                                    typeWriter();
+                                }, 2000);
+                            }
+                        }
+                    
+                        typeWriter();
+                    });
+                </script>
+                <div class="logo-container text-center mb-4">
+                    <h1 class="animated-text">HireLens</h1>
+                </div>
+
                 <h1 class="text-white text-center">Discover. Learn. Enjoy</h1>
 
-                <h6 class="text-center">platform for creatives around the world</h6>
-
-                <form method="get" class="custom-form mt-4 pt-2 mb-lg-0 mb-5" role="search">
-                    <div class="input-group input-group-lg">
-                        <span class="input-group-text bi-search" id="basic-addon1">
-                            
-                        </span>
-
-                        <input name="keyword" type="search" class="form-control" id="keyword" placeholder="Design, Code, Marketing, Finance ..." aria-label="Search">
-
-                        <button type="submit" class="form-control">Search</button>
-                    </div>
-                </form>
+                <h6 class="text-center">Our plateform will help to find your aim job</h6>
+                <p class="text-light" style="text-align:justify;">
+                    The Resume Analysis Project is an advanced tool designed to help job seekers and employers optimize and evaluate resumes efficiently. Utilizing cutting-edge natural language processing (NLP) and machine learning techniques, this project aims to transform the recruitment process by providing detailed insights, recommendations, and scoring for resumes.
+                </p>
+               
             </div>
 
         </div>
@@ -31,84 +70,16 @@
 </section>
 
 
-<section class="featured-section">
-    <div class="container">
-        <div class="row justify-content-center">
-
-            <div class="col-lg-4 col-12 mb-4 mb-lg-0">
-                <div class="custom-block bg-white shadow-lg">
-                    <a href="topics-detail.html">
-                        <div class="d-flex">
-                            <div>
-                                <h5 class="mb-2">Web Design</h5>
-
-                                {% comment %} <p class="mb-0">When you search for free CSS templates, you will notice that TemplateMo is one of the best websites.</p> {% endcomment %}
-                            </div>
-
-                            <span class="badge bg-design rounded-pill ms-auto">14</span>
-                        </div>
-
-                        <img src="{% static '' %}images/topics/undraw_Remote_design_team_re_urdx.png" class="custom-block-image img-fluid" alt="">
-                    </a>
-                </div>
-            </div>
-
-            <div class="col-lg-6 col-12">
-                <div class="custom-block custom-block-overlay">
-                    <div class="d-flex flex-column h-100">
-                        <img src="{% static '' %}images/businesswoman-using-tablet-analysis.jpg" class="custom-block-image img-fluid" alt="">
-
-                        <div class="custom-block-overlay-text d-flex">
-                            <div>
-                                <h5 class="text-white mb-2">Finance</h5>
-
-                                <p class="text-white">Topic Listing Template includes homepage, listing page, detail page, and contact page. You can feel free to edit and adapt for your CMS requirements.</p>
-
-                                <a href="topics-detail.html" class="btn custom-btn mt-2 mt-lg-3">Learn More</a>
-                            </div>
-
-                            <span class="badge bg-finance rounded-pill ms-auto">25</span>
-                        </div>
-
-                        <div class="social-share d-flex">
-                            <p class="text-white me-4">Share:</p>
-
-                            <ul class="social-icon">
-                                <li class="social-icon-item">
-                                    <a href="#" class="social-icon-link bi-twitter"></a>
-                                </li>
-
-                                <li class="social-icon-item">
-                                    <a href="#" class="social-icon-link bi-facebook"></a>
-                                </li>
-
-                                <li class="social-icon-item">
-                                    <a href="#" class="social-icon-link bi-pinterest"></a>
-                                </li>
-                            </ul>
-
-                            <a href="#" class="custom-icon bi-bookmark ms-auto"></a>
-                        </div>
-
-                        <div class="section-overlay"></div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</section>
-
-<section class="explore-section mt-5" id="section_02">
+<section class="explore-section" id="section_02" style="margin:100px 0;">
     <div class="container">
         <div class="row text-center">
-            <div class="col-8 mx-auto text-center">
-                <h2 class="mb-4">Resume Analysis</h1>
+            <div class="col-10 mx-auto text-center">
+                <h2 class="mb-4">Resume Analysis -- > {{current_user.username}}</h1>
                 <form method="post" class="form" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <div class="input-group">
-                        <input type="file" name="resume" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
-                        <button class="btn btn-primary text-light" type="submit" id="inputGroupFileAddon04">Predict Resume</button>
+                    <div class="input-group" style="border-radius:25px">
+                        <input type="file" name="resume" class="form-control p-3" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+                        <button class="btn text-light p-3" type="submit" style="background-color:#80D0C7" id="inputGroupFileAddon04">Analyze</button>
                     </div>
                 </form>
             </div>
@@ -161,51 +132,52 @@
     </div>
 </section>
 
-<section class="timeline-section section-padding mt-5" id="section_3">
-    <div class="section-overlay"></div>
+{% if is_posted == True %}
+    <section class="timeline-section section-padding mt-5" id="section_3">
+        <div class="section-overlay"></div>
 
-    <div class="container">
-        <div class="row">
+        <div class="container">
+            <div class="row">
 
-            <div class="col-12 text-center">
-                <h2 class="text-white mb-4">Resume Feedback</h1>
-            </div>
+                <div class="col-12 text-center">
+                    <h2 class="text-white mb-4">Resume Feedback</h1>
+                </div>
 
-            <div class="col-lg-10 col-12 mx-auto">
-                <div class="timeline-container">
-                        {% if 'Awesome' in objective %}
-                        <p class="p-3 text-light mb-3" style="cursor:pointer;font-size:20px; border-radius: 16px;opacity:0.7;height:100px auto;width:100%;word-wrap: break-word;word-break: break-all;overflow: hidden;">✔️ {{objective}}</p>
-                        {% else %}
-                        <p class="p-3 text-light  mb-3" style="cursor:pointer;font-size:20px; border-radius: 16px;opacity:0.7;height:100px auto;width:100%;word-wrap: break-word;word-break: break-all;overflow: hidden;">✖️ {{objective|slice:"58"}}<br>{{objective|slice:"58:"}}</p>
-                        {% endif %}
-              
-                        {% if 'Awesome' in declaration %}
-                        <p class="p-3 text-light mb-3" style="cursor:pointer;font-size:20px; border-radius: 16px;opacity:0.7;height:100px auto;width:100%;word-wrap: break-word;word-break: break-all;overflow: hidden;">✔️ {{declaration}}</p>
-                        {% else %}
-                        <p class="p-3 text-light  mb-3" style="cursor:pointer;font-size:20px; border-radius: 16px;opacity:0.7;height:100px auto;width:100%;word-wrap: break-word;word-break: break-all;overflow: hidden;">✖️ {{declaration|slice:"58"}}<br>{{declaration|slice:"58:"}}</p>
-                        {% endif %}
-                        {% if 'Awesome' in hobbies %}
-                        <p class="p-3 text-light mb-3" style="cursor:pointer;font-size:20px; border-radius: 16px;opacity:0.7;height:100px auto;width:100%;word-wrap: break-word;word-break: break-all;overflow: hidden;">✔️ {{hobbies}}</p>
-                        {% else %}
-                        <p class="p-3 text-light  mb-3" style="cursor:pointer;font-size:20px; border-radius: 16px;opacity:0.7;height:100px auto;width:100%;word-wrap: break-word;word-break: break-all;overflow: hidden;">✖️ {{hobbies|slice:"58"}}<br>{{hobbies|slice:"58:"}}</p>
-                        {% endif %}
-              
-                        {% if 'Awesome' in achievements %}
-                        <p class="p-3 text-light mb-3" style="cursor:pointer;font-size:20px; border-radius: 16px;opacity:0.7;height:100px auto;width:100%;word-wrap: break-word;word-break: break-all;overflow: hidden;">✔️ {{achievements}}</p>
-                        {% else %}
-                        <p class="p-3 text-light  mb-3" style="cursor:pointer;font-size:20px; border-radius: 16px;opacity:0.7;height:100px auto;width:100%;word-wrap: break-word;word-break: break-all;overflow: hidden;">✖️ {{achievements|slice:"58"}}<br>{{achievements|slice:"58:"}}</p>
-                        {% endif %}
-              
-                        {% if 'Awesome' in projects %}
-                        <p class="p-3 text-light mb-3" style="cursor:pointer;font-size:20px; border-radius: 16px;opacity:0.7;height:100px auto;width:100%;word-wrap: break-word;word-break: break-all;overflow: hidden;">✔️ {{projects}}</p>
-                        {% else %}
-                        <p class="p-3 text-light  mb-3" style="cursor:pointer;font-size:20px; border-radius: 16px;opacity:0.7;height:100px auto;width:100%;word-wrap: break-word;word-break: break-all;overflow: hidden;">✖️ {{projects|slice:"58"}}<br>{{projects|slice:"58:"}}</p>
-                        {% endif %}
-                     </div>
+                <div class="col-lg-10 col-12 mx-auto">
+                    <div class="timeline-container">
+                            {% if 'Awesome' in objective %}
+                            <p class="p-3 text-light mb-3" style="cursor:pointer;font-size:20px; border-radius: 16px;opacity:0.7;height:100px auto;width:100%;word-wrap: break-word;word-break: break-all;overflow: hidden;">✔️ {{objective}}</p>
+                            {% else %}
+                            <p class="p-3 text-light  mb-3" style="cursor:pointer;font-size:20px; border-radius: 16px;opacity:0.7;height:100px auto;width:100%;word-wrap: break-word;word-break: break-all;overflow: hidden;">✖️ {{objective|slice:"58"}}<br>{{objective|slice:"58:"}}</p>
+                            {% endif %}
+                
+                            {% if 'Awesome' in declaration %}
+                            <p class="p-3 text-light mb-3" style="cursor:pointer;font-size:20px; border-radius: 16px;opacity:0.7;height:100px auto;width:100%;word-wrap: break-word;word-break: break-all;overflow: hidden;">✔️ {{declaration}}</p>
+                            {% else %}
+                            <p class="p-3 text-light  mb-3" style="cursor:pointer;font-size:20px; border-radius: 16px;opacity:0.7;height:100px auto;width:100%;word-wrap: break-word;word-break: break-all;overflow: hidden;">✖️ {{declaration|slice:"58"}}<br>{{declaration|slice:"58:"}}</p>
+                            {% endif %}
+                            {% if 'Awesome' in hobbies %}
+                            <p class="p-3 text-light mb-3" style="cursor:pointer;font-size:20px; border-radius: 16px;opacity:0.7;height:100px auto;width:100%;word-wrap: break-word;word-break: break-all;overflow: hidden;">✔️ {{hobbies}}</p>
+                            {% else %}
+                            <p class="p-3 text-light  mb-3" style="cursor:pointer;font-size:20px; border-radius: 16px;opacity:0.7;height:100px auto;width:100%;word-wrap: break-word;word-break: break-all;overflow: hidden;">✖️ {{hobbies|slice:"58"}}<br>{{hobbies|slice:"58:"}}</p>
+                            {% endif %}
+                
+                            {% if 'Awesome' in achievements %}
+                            <p class="p-3 text-light mb-3" style="cursor:pointer;font-size:20px; border-radius: 16px;opacity:0.7;height:100px auto;width:100%;word-wrap: break-word;word-break: break-all;overflow: hidden;">✔️ {{achievements}}</p>
+                            {% else %}
+                            <p class="p-3 text-light  mb-3" style="cursor:pointer;font-size:20px; border-radius: 16px;opacity:0.7;height:100px auto;width:100%;word-wrap: break-word;word-break: break-all;overflow: hidden;">✖️ {{achievements|slice:"58"}}<br>{{achievements|slice:"58:"}}</p>
+                            {% endif %}
+                
+                            {% if 'Awesome' in projects %}
+                            <p class="p-3 text-light mb-3" style="cursor:pointer;font-size:20px; border-radius: 16px;opacity:0.7;height:100px auto;width:100%;word-wrap: break-word;word-break: break-all;overflow: hidden;">✔️ {{projects}}</p>
+                            {% else %}
+                            <p class="p-3 text-light  mb-3" style="cursor:pointer;font-size:20px; border-radius: 16px;opacity:0.7;height:100px auto;width:100%;word-wrap: break-word;word-break: break-all;overflow: hidden;">✖️ {{projects|slice:"58"}}<br>{{projects|slice:"58:"}}</p>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-
+    </section>
+{% endif %}
 {% endblock content %}

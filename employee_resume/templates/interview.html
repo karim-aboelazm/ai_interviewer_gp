@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block title %}
-    Technical InterView
+Technical InterView
 {% endblock title %}
 {% block content %}
 <header class="site-header d-flex flex-column justify-content-center align-items-center">
@@ -24,60 +24,60 @@
 <section class="topics-detail-section section-padding" id="topics-detail">
     <div class="container">
         <div class="row">
-            {% for q in all_questions %}
-                <div class="col-lg-10 col-12 m-auto card p-5 text-center">
-                    <div class="row question my-3">
-                        <div class="col-md-12 card p-3">
-                            {% if q.question_image %}
-                              <img src="{{q.question_image.url}}" class="img-fluid rounded-top"/>
-                                {% if q.question_image_des %}
-                                    <p>{{q.question_image_des}}</p>
-                                {% endif %}
-                            {% elif q.question_text %}
-                                {{q.question_text}}
-                                {% if q.question_text_des %}
-                                <p>{{q.question_text_des}}</p>
-                                {% endif %}
-                            {% endif %}
-                        </div>
+            {% for q in page_obj %}
+            <div class="col-lg-10 col-12 m-auto card p-5 text-center">
+                <div class="row question my-3">
+                    <div class="col-md-12 card p-3">
+                        {% if q.question_image %}
+                        <img src="{{ q.question_image.url }}" class="img-fluid rounded-top"/>
+                        {% if q.question_image_des %}
+                        <p>{{ q.question_image_des }}</p>
+                        {% endif %}
+                        {% elif q.question_text %}
+                        {{ q.question_text }}
+                        {% if q.question_text_des %}
+                        <p>{{ q.question_text_des }}</p>
+                        {% endif %}
+                        {% endif %}
                     </div>
-                    <div class="row answer_1 my-3">
-                        <div class="col-md-12 card p-3" style="text-align: left;">
-                            A) {{q.answer_one}}
-                        </div>
+                </div>
+                <div class="row answer_1 my-3">
+                    <div class="col-md-12 card p-3" style="text-align: left;">
+                        A) {{ q.answer_one }}
                     </div>
-                    <div class="row answer_2 my-3">
-                        <div class="col-md-12 card p-3" style="text-align: left;">
-                            B) {{q.answer_two}}
-                        </div>
+                </div>
+                <div class="row answer_2 my-3">
+                    <div class="col-md-12 card p-3" style="text-align: left;">
+                        B) {{ q.answer_two }}
                     </div>
-                    <div class="row answer_3 my-3">
-                        <div class="col-md-12 card p-3" style="text-align: left;">
-                            C) {{q.answer_three}}
-                        </div>
+                </div>
+                <div class="row answer_3 my-3">
+                    <div class="col-md-12 card p-3" style="text-align: left;">
+                        C) {{ q.answer_three }}
                     </div>
-                    <div class="row answer_4 my-3">
-                        <div class="col-md-12 card p-3" style="text-align: left;">
-                            D) {{q.answer_four}}
-                        </div>
+                </div>
+                <div class="row answer_4 my-3">
+                    <div class="col-md-12 card p-3" style="text-align: left;">
+                        D) {{ q.answer_four }}
                     </div>
-                    <div class="row answer_choose my-3">
-                        <div class="col-md-8 mx-auto" style="text-align: left;">
+                </div>
+                <div class="row answer_choose my-3">
+                    <div class="col-md-8 mx-auto" style="text-align: left;">
                         <form action="" method="post" class="form-control" style="border:none;">
                             {% csrf_token %}
                             <div class="input-group mb-3" style="border:none;">
-                                <input type="hidden" name="question_id" value="{{q.id}}">
+                                <input type="hidden" name="question_id" value="{{ q.id }}">
                                 <select name="user_answer" class="form-control" aria-label="Your Choice" aria-describedby="button-addon2">
                                     {% for choice_value, choice_label in form.user_answer.field.choices %}
-                                        <option value="{{ choice_value }}">{{ choice_label }}</option>
+                                    <option value="{{ choice_value }}">{{ choice_label }}</option>
                                     {% endfor %}
                                 </select>
-                                <button class="btn btn-outline-success" type="submit" id="button-addon2">Button</button>
-                            </div>                          
-                            </form>
-                        </div>
+                                <button class="btn btn-outline-success" type="submit" id="button-addon2">Submit</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
+            </div>
             {% endfor %}
         </div>
     </div>

@@ -1,6 +1,10 @@
 from typing import Iterable
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User,AbstractUser
+from django.conf import settings
+ANSWERS = [(i.upper(),i.upper()) for i in ['a','b','c','d']]
+
+# OopCompanion:suppressRename
 
 class Resume(models.Model):
     resume = models.FileField(upload_to='resume/')
@@ -12,20 +16,20 @@ class ResumeAnalysis(models.Model):
     resume = models.ForeignKey(Resume,on_delete=models.CASCADE)
 
     name = models.CharField(max_length=200)
-    
+
     email = models.EmailField()
-    
+
     score = models.IntegerField()
 
     phone = models.CharField(max_length=30)
-    
+
     prediction = models.CharField(max_length=200)
 
     def __str__(self):
         return f"Resume Analysis - [{self.id}] - done"
 
 class HrModel(models.Model):
-    user = models.OneToOneField(User,on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
 
     full_name = models.CharField(max_length=250)
 
@@ -36,10 +40,10 @@ class HrModel(models.Model):
     phone = models.CharField(max_length=15,null=True,blank=True)
 
     join_on = models.DateTimeField(auto_now_add=True)
-    
+
     def __str__(self):
         return self.full_name
-    
+
 class AffineModel(models.Model):
     token = models.CharField(max_length=250,verbose_name='Affine Token')
     workspace = models.CharField(max_length=50,verbose_name='Affine Workspace')
@@ -56,8 +60,6 @@ class Job(models.Model):
     job_salary = models.IntegerField()
     def __str__(self):
         return self.job_title
-    
-ANSWERS = [(i.upper(),i.upper()) for i in ['a','b','c','d']]
 
 class InterViewQuestion(models.Model):
     job = models.ForeignKey(Job,on_delete=models.CASCADE)
@@ -73,9 +75,8 @@ class InterViewQuestion(models.Model):
     def __str__(self):
         return f"Question - ({self.id}) for job ({self.job.job_title})"
 
-
 class InterviewQuestionReview(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     question = models.ForeignKey(InterViewQuestion,on_delete=models.CASCADE)
     correct_answer = models.CharField(max_length=5,null=True,blank=True)
     user_answer = models.CharField(choices=ANSWERS,max_length=5,null=True,blank=True)
@@ -87,9 +88,9 @@ class InterviewQuestionReview(models.Model):
             if self.user_answer == self.correct_answer:
                 self.answer_rate = 1
             else:
-                self.answer_rate = 0                
+                self.answer_rate = 0
         return super().save()
-    
+
     def __str__(self):
         obj = f"{self.user} has choosed ({self.user_answer})"
         if self.correct_answer == self.user_answer:
@@ -97,3 +98,15 @@ class InterviewQuestionReview(models.Model):
         else:
             obj = f"{self.user.username} has failed from this question"
         return obj
+
+class ApplicantModel(models.Model):
+    user = models.OneToOneField(User, verbose_name=('Applicant User'), on_delete=models.CASCADE)
+    full_name = models.CharField(verbose_name=('Applicant Full Name'), max_length=200)
+    address = models.CharField(verbose_name=('Applicant Address'), max_length=200)
+    image = models.ImageField(verbose_name=('Applicant Image'), upload_to='Applicant/Images/')
+    phone = models.CharField(verbose_name=('Applicant Phone'), max_length=15, unique=True)
+    class Meta:
+        verbose_name_plural = 'Applicant'
+    
+    def __str__(self):
+        return self.full_name
